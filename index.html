@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YADRO Project AI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-glow page-glow-left"></div>
+    <div class="page-glow page-glow-right"></div>
+
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">YADRO project ai</p>
+            <strong>Контур проектов</strong>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="ghost-button" type="button" data-screen-target="home">Портфель Q2</button>
+          <button class="ghost-button" type="button" data-screen-target="projects">27 активных инициатив</button>
+          <button class="profile-button" type="button" data-screen-target="profile">
+            <span class="profile-avatar">АП</span>
+            <span class="profile-copy">
+              <strong>Анна Петрова</strong>
+              <small>руководитель офиса</small>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <div class="app-stage">
+        <section class="product-view is-active" id="screen-home" data-screen="home">
+          <section class="hero-card">
+            <div class="hero-copy">
+              <p class="eyebrow">Главный экран сервиса</p>
+              <h1>ИИ-ассистент, который собирает сроки, подсвечивает риски и объясняет, где проект теряет деньги.</h1>
+              <p class="hero-text">
+                Сервис объединяет Jira, Confluence, протоколы встреч и загруженные менеджером материалы.
+                Руководитель видит финансовый эффект и источники цифр, а менеджер сразу управляет критическим путём.
+              </p>
+
+              <div class="hero-actions">
+                <button class="primary-button" type="button" data-action="reconcile">Сверить данные</button>
+                <button class="secondary-button" type="button" data-screen-target="reports">Проверить презентацию</button>
+              </div>
+            </div>
+
+            <aside class="hero-score hero-score-high">
+              <div class="score-header">
+                <span class="score-label">Вероятность срыва релиза</span>
+                <span class="score-pill">AI signal</span>
+              </div>
+
+              <div class="score-ring">
+                <div class="score-ring-inner">
+                  <strong>68%</strong>
+                  <span>повышенный риск</span>
+                </div>
+              </div>
+
+              <ul class="score-list">
+                <li>API-команда не подтвердила дату интеграции</li>
+                <li>Сроки в Jira и в протоколах встреч расходятся</li>
+                <li>Сдвиг на 2 дня уменьшает риск на 1,8 млн ₽</li>
+              </ul>
+            </aside>
+          </section>
+
+          <section class="search-panel">
+            <label class="searchbox" for="global-search">
+              <span class="search-icon" aria-hidden="true"></span>
+              <input
+                id="global-search"
+                type="text"
+                placeholder="Найти проект, источник, отчёт или задачу"
+                aria-label="Поиск по сервису"
+              />
+            </label>
+
+            <div class="quick-filters">
+              <button class="filter-chip filter-chip-active" type="button" data-filter="all">Все проекты</button>
+              <button class="filter-chip" type="button" data-filter="risk">Красная зона</button>
+              <button class="filter-chip" type="button" data-filter="sync">Сверка сроков</button>
+              <button class="filter-chip" type="button" data-filter="retro">Ретроспектива</button>
+              <button class="filter-chip" type="button" data-filter="report">Проверка отчёта</button>
+            </div>
+          </section>
+
+          <section class="category-strip">
+            <article class="category-card category-card-active" data-filter="risk" tabindex="0" role="button">
+              <span class="category-count">12</span>
+              <strong>Риски</strong>
+              <p>Прогноз срыва, критический путь и каскадные зависимости.</p>
+            </article>
+            <article class="category-card" data-filter="sync" tabindex="0" role="button">
+              <span class="category-count">09</span>
+              <strong>Сверка данных</strong>
+              <p>Расхождения между Jira, Confluence, письмами и встречами.</p>
+            </article>
+            <article class="category-card" data-filter="retro" tabindex="0" role="button">
+              <span class="category-count">05</span>
+              <strong>Ретроспективы</strong>
+              <p>Повторяющиеся причины срыва в завершённых проектах.</p>
+            </article>
+            <article class="category-card" data-filter="report" tabindex="0" role="button">
+              <span class="category-count">03</span>
+              <strong>Проверка отчётов</strong>
+              <p>Верификация цифр и быстрый поиск первоисточников.</p>
+            </article>
+          </section>
+
+          <section class="home-grid">
+            <article class="surface-card">
+              <div class="section-heading surface-heading">
+                <div>
+                  <p class="eyebrow">Критические проекты</p>
+                  <h2>Фокус руководителя на сегодня</h2>
+                </div>
+                <button class="ghost-button ghost-button-dark" type="button" data-screen-target="projects">Весь портфель</button>
+              </div>
+
+              <div class="compact-project-list">
+                <article class="compact-project-card" data-project="alpha">
+                  <div class="compact-project-head">
+                    <div>
+                      <strong>Alpha ERP</strong>
+                      <p>Интеграция CRM и биллинга</p>
+                    </div>
+                    <span class="status-chip status-chip-danger">68% риск</span>
+                  </div>
+                  <div class="compact-metrics">
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Источники расхождения" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Стендап: 22.05">
+                      <span>4 источника</span>
+                    </div>
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Финансовый эффект" data-tooltip-text="Штраф по SLA, отложенный запуск биллинга и дополнительная загрузка команды">
+                      <span>7,4 млн ₽</span>
+                    </div>
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Рекомендация AI" data-tooltip-text="Перенести старт интеграционного тестирования на 2 дня позже и закрепить одну эталонную дату">
+                      <span>AI-план</span>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="compact-project-card" data-project="nova">
+                  <div class="compact-project-head">
+                    <div>
+                      <strong>Nova Stack</strong>
+                      <p>Миграция внутреннего портала</p>
+                    </div>
+                    <span class="status-chip status-chip-warn">54% риск</span>
+                  </div>
+                  <div class="compact-metrics">
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Причина перегрузки" data-tooltip-text="6 сотрудников выходят за порог 40 ч/нед на следующей неделе">
+                      <span>6 сотрудников</span>
+                    </div>
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Основа прогноза" data-tooltip-text="Brief проекта, операционные логи и похожие завершённые релизы">
+                      <span>0.81 доверие</span>
+                    </div>
+                    <div class="metric-pill has-tooltip" data-tooltip-title="Не подтверждено" data-tooltip-text="API-контракт и окно интеграции со смежной командой">
+                      <span>2 зависимости</span>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </article>
+
+            <aside class="surface-card status-rail">
+              <div class="section-heading surface-heading">
+                <div>
+                  <p class="eyebrow">AI-инсайты</p>
+                  <h2>Быстрые действия</h2>
+                </div>
+                <span class="tiny-pill tiny-pill-dark">live</span>
+              </div>
+
+              <div class="status-stack">
+                <article class="status-item has-tooltip" data-tooltip-title="Почему это важно" data-tooltip-text="Если не унифицировать дату релиза, презентация и операционный контур будут расходиться до комитета">
+                  <strong>Унифицировать дату в Jira и Confluence</strong>
+                  <p>AI уже нашёл эталонную дату и готов обновить связанные записи.</p>
+                </article>
+                <article class="status-item has-tooltip" data-tooltip-title="Каскадный эффект" data-tooltip-text="Сдвиг одной задачи переносит ещё 3 зависимые точки, но сохраняет клиентское окно">
+                  <strong>Перенести старт тестирования на 2 дня</strong>
+                  <p>Это снижает риск каскадной задержки и сохраняет релиз в окне.</p>
+                </article>
+                <article class="status-item has-tooltip" data-tooltip-title="Ретроспективный паттерн" data-tooltip-text="Такая же комбинация причин уже была в прошлом релизе: внешняя зависимость и неверная оценка трудозатрат">
+                  <strong>Запустить ретроспективу по похожему проекту</strong>
+                  <p>Сервис уже подобрал похожий кейс и показал главные причины срыва.</p>
+                </article>
+              </div>
+            </aside>
+          </section>
+        </section>
+
+        <section class="product-view" id="screen-projects" data-screen="projects">
+          <div class="screen-shell">
+            <div class="screen-heading">
+              <div>
+                <p class="eyebrow">Проекты</p>
+                <h2>Портфель с приоритетами и конфликтами</h2>
+              </div>
+              <div class="screen-actions">
+                <button class="ghost-button" type="button" data-action="reconcile">Сверить сроки</button>
+                <button class="ghost-button" type="button" data-screen-target="reports">Экспорт в отчёт</button>
+              </div>
+            </div>
+
+            <div class="projects-layout">
+              <div class="project-grid" id="project-grid">
+                <article class="project-card" data-project="alpha" data-tags="risk sync finance jira дедлайн crm биллинг">
+                  <div class="project-visual visual-risk">
+                    <span class="visual-badge">Сверка сроков</span>
+                    <div class="visual-bars">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                  <div class="project-body">
+                    <div class="project-title-row">
+                      <div>
+                        <h3>Alpha ERP</h3>
+                        <p>Интеграция CRM и биллинга</p>
+                      </div>
+                      <span class="status-chip status-chip-danger">68% риск</span>
+                    </div>
+                    <div class="project-meta">
+                      <div>
+                        <span>Дедлайн</span>
+                        <strong>28 июня</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="Формула потерь" data-tooltip-text="Штраф по SLA + задержка запуска биллинга + дополнительная загрузка команды">
+                        <span>Потери при сдвиге</span>
+                        <strong>7,4 млн ₽</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="Источники" data-tooltip-text="Jira • Confluence • протокол встречи • письмо клиенту">
+                        <span>Конфликтов</span>
+                        <strong>4 источника</strong>
+                      </div>
+                    </div>
+                    <p class="project-note">
+                      AI предлагает перенести старт интеграционного тестирования на 2 дня и унифицировать даты.
+                    </p>
+                    <div class="project-actions">
+                      <button class="text-button" type="button" data-action="details" data-project="alpha">Детали</button>
+                      <button class="text-button" type="button" data-action="report" data-project="alpha">Добавить в отчёт</button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="project-card" data-project="nova" data-tags="risk retro load team миграция портал brief">
+                  <div class="project-visual visual-balance">
+                    <span class="visual-badge">Загрузка команды</span>
+                    <div class="visual-orbit">
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                  <div class="project-body">
+                    <div class="project-title-row">
+                      <div>
+                        <h3>Nova Stack</h3>
+                        <p>Миграция платформы внутреннего портала</p>
+                      </div>
+                      <span class="status-chip status-chip-warn">54% риск</span>
+                    </div>
+                    <div class="project-meta">
+                      <div>
+                        <span>Дедлайн</span>
+                        <strong>11 июля</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="Кто перегружен" data-tooltip-text="2 backend, 2 QA и 2 аналитика переходят порог 40 ч/нед">
+                        <span>Перегрузка</span>
+                        <strong>6 сотрудников</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="На чём основан прогноз" data-tooltip-text="Brief проекта, операционные логи, история похожих релизов, частичные данные Jira">
+                        <span>Доверие модели</span>
+                        <strong>0.81</strong>
+                      </div>
+                    </div>
+                    <p class="project-note">
+                      Частично ручной контур, но AI уже нашёл критические внешние зависимости и риски перегрузки.
+                    </p>
+                    <div class="project-actions">
+                      <button class="text-button" type="button" data-action="details" data-project="nova">Сценарии</button>
+                      <button class="text-button" type="button" data-action="manual" data-project="nova">Корректировка</button>
+                    </div>
+                  </div>
+                </article>
+
+                <article class="project-card" data-project="gamma" data-tags="report verify source презентация комитет цифры">
+                  <div class="project-visual visual-verify">
+                    <span class="visual-badge">Проверка отчёта</span>
+                    <div class="visual-doc">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                  <div class="project-body">
+                    <div class="project-title-row">
+                      <div>
+                        <h3>Gamma Cloud</h3>
+                        <p>Презентация на комитет во вторник</p>
+                      </div>
+                      <span class="status-chip status-chip-safe">Готов к проверке</span>
+                    </div>
+                    <div class="project-meta">
+                      <div>
+                        <span>Слайдов</span>
+                        <strong>18</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="Какие цифры проверяются" data-tooltip-text="Даты релиза, потери, прогноз загрузки, статус внешней интеграции">
+                        <span>Цифр на проверке</span>
+                        <strong>26</strong>
+                      </div>
+                      <div class="has-tooltip" data-tooltip-title="Найденные расхождения" data-tooltip-text="Дата релиза в PPTX и Jira не совпадает. Сумма потерь обновлена в finance snapshot">
+                        <span>Расхождений</span>
+                        <strong>2</strong>
+                      </div>
+                    </div>
+                    <p class="project-note">
+                      Руководитель может кликнуть по любой цифре и сразу увидеть подтверждающий источник.
+                    </p>
+                    <div class="project-actions">
+                      <button class="text-button" type="button" data-action="source" data-project="gamma">Найти источник</button>
+                      <button class="text-button" type="button" data-action="verify" data-project="gamma">Запустить AI-проверку</button>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <aside class="surface-card project-side-panel">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">Критический путь</p>
+                    <h2>Где сервис даёт пояснение</h2>
+                  </div>
+                </div>
+
+                <div class="explain-list">
+                  <article class="explain-item has-tooltip" data-tooltip-title="Источники по срокам" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Встреча: 22.05 • Письмо клиенту: 24.05">
+                    <strong>Расхождение по срокам</strong>
+                    <p>Наведение показывает все источники и даты прямо в сервисе.</p>
+                  </article>
+                  <article class="explain-item has-tooltip" data-tooltip-title="Каскадные зависимости" data-tooltip-text="Сдвиг Alpha ERP влияет на тестирование, клиентское демо и релиз смежной команды">
+                    <strong>Влияние на зависимые задачи</strong>
+                    <p>Пользователь видит не только риск, но и цепочку последствий.</p>
+                  </article>
+                  <article class="explain-item has-tooltip" data-tooltip-title="Почему AI уверен" data-tooltip-text="Учитываются загруженные brief-файлы, журнал статусов и шаблоны из завершённых проектов">
+                    <strong>Основание прогноза</strong>
+                    <p>У каждой рекомендации есть объяснение и контекст.</p>
+                  </article>
+                </div>
+              </aside>
+            </div>
+
+            <div class="empty-state is-hidden" id="empty-state">
+              <strong>Ничего не найдено</strong>
+              <p>Попробуйте другой запрос или переключите фильтр.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="product-view" id="screen-ai" data-screen="ai">
+          <div class="screen-shell">
+            <div class="screen-heading">
+              <div>
+                <p class="eyebrow">AI-ассистент</p>
+                <h2>Рекомендации, вопросы и объяснения</h2>
+              </div>
+              <div class="screen-actions">
+                <button class="ghost-button" type="button" data-question="critical">Что тянет критический путь?</button>
+              </div>
+            </div>
+
+            <div class="ai-layout">
+              <section class="surface-card">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">Готовые вопросы</p>
+                    <h2>Работа с руководителем</h2>
+                  </div>
+                </div>
+
+                <div class="question-list question-list-column">
+                  <button class="question-chip" type="button" data-question="losses">Откуда цифра по убыткам?</button>
+                  <button class="question-chip" type="button" data-question="delay">Почему релиз ушёл вправо?</button>
+                  <button class="question-chip" type="button" data-question="critical">Какая задача тянет критический путь?</button>
+                  <button class="question-chip" type="button" data-question="unconfirmed">Какие сроки ещё не подтверждены?</button>
+                </div>
+
+                <article class="answer-card" id="answer-card">
+                  <span class="answer-label">AI-ответ</span>
+                  <strong id="answer-title">Быстрый разбор по проекту</strong>
+                  <p id="answer-text">
+                    Выберите вопрос, и сервис покажет ответ с источником, пояснением и следующим действием.
+                  </p>
+                </article>
+              </section>
+
+              <section class="surface-card">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">AI-инсайты</p>
+                    <h2>Панель действий</h2>
+                  </div>
+                  <span class="tiny-pill tiny-pill-dark">live</span>
+                </div>
+
+                <div class="status-stack">
+                  <article class="status-item" data-action="details" data-project="alpha">
+                    <strong>Сдвинуть начало тестирования</strong>
+                    <p>Снижает каскадную задержку на 11% и не меняет клиентское окно релиза.</p>
+                  </article>
+                  <article class="status-item" data-action="details" data-project="nova">
+                    <strong>Подтвердить API-контракт у смежной команды</strong>
+                    <p>Без статуса по интеграции модель удерживает проект в красной зоне.</p>
+                  </article>
+                  <article class="status-item" data-action="details" data-project="gamma">
+                    <strong>Проверить 2 расхождения в презентации</strong>
+                    <p>AI уже сопоставил слайды с задачами и финансовым snapshot.</p>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="product-view" id="screen-reports" data-screen="reports">
+          <div class="screen-shell">
+            <div class="screen-heading">
+              <div>
+                <p class="eyebrow">Отчёты и верификация</p>
+                <h2>Проверка презентаций и источников цифр</h2>
+              </div>
+              <div class="screen-actions">
+                <button class="ghost-button" type="button" data-action="verify-all">Сводная проверка</button>
+              </div>
+            </div>
+
+            <div class="reports-layout">
+              <section class="surface-card upload-surface">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">Загрузка материалов</p>
+                    <h2>Brief, PDF или PPTX</h2>
+                  </div>
+                </div>
+
+                <div class="upload-zone" id="upload-zone" tabindex="0" role="button">
+                  <span class="upload-icon" aria-hidden="true"></span>
+                  <strong id="upload-title">Перетащите описание проекта или презентацию</strong>
+                  <p id="upload-text">Сервис соберёт прогноз, найдёт источники цифр и подготовит summary для руководителя.</p>
+                </div>
+                <input class="visually-hidden" id="file-input" type="file" accept=".pdf,.ppt,.pptx,.doc,.docx" />
+              </section>
+
+              <section class="surface-card verification-surface">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">Найденные расхождения</p>
+                    <h2>Что уже проверено AI</h2>
+                  </div>
+                </div>
+
+                <div class="verification-list">
+                  <article class="verification-row has-tooltip" data-tooltip-title="Источники даты" data-tooltip-text="PPTX: 15 мая • Jira: 20 мая • Протокол встречи: 18 мая">
+                    <div>
+                      <strong>Дата релиза в отчёте расходится с Jira</strong>
+                      <p>AI нашёл конфликт и предлагает обновить 2 слайда.</p>
+                    </div>
+                    <span class="status-chip status-chip-danger">критично</span>
+                  </article>
+                  <article class="verification-row has-tooltip" data-tooltip-title="Источники убытков" data-tooltip-text="Finance snapshot 12.05 • Budget review • карточка Alpha ERP">
+                    <div>
+                      <strong>Сумма потерь подтверждена финансовым контуром</strong>
+                      <p>Пояснение доступно по наведению и через кнопку поиска источника.</p>
+                    </div>
+                    <span class="status-chip status-chip-safe">проверено</span>
+                  </article>
+                  <article class="verification-row has-tooltip" data-tooltip-title="Не хватает данных" data-tooltip-text="В презентации есть прогноз загрузки, но не приложен источник из планирования команды">
+                    <div>
+                      <strong>Прогноз загрузки команды не подкреплён ссылкой</strong>
+                      <p>AI рекомендует приложить источник из weekly capacity review.</p>
+                    </div>
+                    <span class="status-chip status-chip-warn">уточнить</span>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="product-view" id="screen-profile" data-screen="profile">
+          <div class="screen-shell">
+            <div class="screen-heading">
+              <div>
+                <p class="eyebrow">Профиль</p>
+                <h2>Руководитель офиса проектов</h2>
+              </div>
+            </div>
+
+            <div class="profile-layout">
+              <section class="surface-card">
+                <div class="profile-grid">
+                  <div class="profile-stat">
+                    <span>Доступные модули</span>
+                    <strong>1, 2, 3, 4</strong>
+                  </div>
+                  <div class="profile-stat">
+                    <span>Фокус недели</span>
+                    <strong>3 риска и 2 отчёта</strong>
+                  </div>
+                  <div class="profile-stat">
+                    <span>Последний вопрос AI</span>
+                    <strong id="profile-last-question">ещё не задан</strong>
+                  </div>
+                </div>
+              </section>
+
+              <section class="surface-card">
+                <div class="section-heading surface-heading">
+                  <div>
+                    <p class="eyebrow">Ролевые права</p>
+                    <h2>Что доступно в сервисе</h2>
+                  </div>
+                </div>
+
+                <div class="permission-list">
+                  <article class="status-item">
+                    <strong>Просмотр агрегированных данных по портфелю</strong>
+                    <p>Сводка рисков, сроки, финансовый эффект и подтверждённость дат.</p>
+                  </article>
+                  <article class="status-item">
+                    <strong>Проверка презентаций и поиск источников</strong>
+                    <p>Любую цифру или дату можно проверить прямо из отчётного контура.</p>
+                  </article>
+                  <article class="status-item">
+                    <strong>Ретроспективы завершённых проектов</strong>
+                    <p>Сервис объясняет, почему релиз сдвинулся и какие паттерны повторяются.</p>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <nav class="bottom-nav" aria-label="Нижняя навигация">
+        <button class="nav-item nav-item-active" type="button" data-screen-target="home">
+          <span class="nav-icon nav-icon-home" aria-hidden="true"></span>
+          <span>Главная</span>
+        </button>
+        <button class="nav-item" type="button" data-screen-target="projects">
+          <span class="nav-icon nav-icon-grid" aria-hidden="true"></span>
+          <span>Проекты</span>
+        </button>
+        <button class="nav-item" type="button" data-screen-target="ai">
+          <span class="nav-icon nav-icon-spark" aria-hidden="true"></span>
+          <span>AI</span>
+        </button>
+        <button class="nav-item" type="button" data-screen-target="reports">
+          <span class="nav-icon nav-icon-report" aria-hidden="true"></span>
+          <span>Отчёты</span>
+        </button>
+        <button class="nav-item" type="button" data-screen-target="profile">
+          <span class="nav-icon nav-icon-user" aria-hidden="true"></span>
+          <span>Профиль</span>
+        </button>
+      </nav>
+    </main>
+
+    <div class="tooltip-card is-hidden" id="tooltip-card">
+      <span class="answer-label" id="tooltip-title">Источник</span>
+      <p id="tooltip-text"></p>
+    </div>
+
+    <div class="modal-backdrop is-hidden" id="modal-backdrop">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" type="button" id="modal-close" aria-label="Закрыть окно">×</button>
+        <span class="answer-label" id="modal-kicker">Карточка проекта</span>
+        <h2 id="modal-title">Детали проекта</h2>
+        <p id="modal-text">Здесь появятся причины риска, конфликты и рекомендации.</p>
+        <div class="modal-metrics" id="modal-metrics"></div>
+        <div class="modal-list" id="modal-list"></div>
+      </div>
+    </div>
+
+    <div class="toast is-hidden" id="toast"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
