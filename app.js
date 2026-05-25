@@ -23,7 +23,7 @@ const ROLE_CONFIGS = {
       overview: true,
       portfolio: true,
       ownProjects: false,
-      reportUpload: false,
+      reportUpload: true,
       reportDecision: true,
       recommendationDecision: true,
       meetings: true,
@@ -46,7 +46,7 @@ const ROLE_CONFIGS = {
       },
       {
         title: "Проверка и принятие отчётов",
-        text: "Руководитель видит подтверждённые цифры, расхождения и может принять или вернуть отчёт менеджеру."
+        text: "Руководитель может загружать отчёты на проверку, видеть подтверждённые цифры, расхождения и принимать решение по материалу."
       },
       {
         title: "Принятие рекомендаций и совещания",
