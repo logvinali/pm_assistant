@@ -229,6 +229,8 @@ const PROJECTS = {
     reportId: "alpha-report",
     filters: ["risk", "sync", "report"],
     note: "AI предлагает перенести старт интеграционного тестирования на 2 дня и унифицировать даты.",
+    summary:
+      "AI обнаружил расхождение дат в четырёх источниках. Jira указывает 20 мая, Confluence — 25 мая, протокол встречи — 22 мая, письмо клиенту — 24 мая. Унификация на 22 мая снижает финансовый риск.",
     conflictCount: "4 источника",
     modelTrust: "0.84",
     discrepancies: [
@@ -244,6 +246,11 @@ const PROJECTS = {
       "Confluence: дата интеграции 25 мая",
       "Протокол стендапа: 22 мая",
       "Письмо клиенту: 24 мая"
+    ],
+    actions: [
+      "Унифицировать дату релиза во всех системах.",
+      "Перенести старт интеграционного тестирования на 2 дня.",
+      "Запросить письменное подтверждение у API-команды."
     ],
     aiRecommendation: {
       title: "Перенести старт интеграционного тестирования на 2 дня",
@@ -277,6 +284,8 @@ const PROJECTS = {
     reportId: "nova-report",
     filters: ["risk", "retro"],
     note: "Частично ручной контур, но AI уже нашёл критические внешние зависимости и риски перегрузки.",
+    summary:
+      "6 сотрудников выходят за порог 40 ч/нед на следующей неделе. API-контракт со смежной командой не подтверждён. Модель рекомендует перераспределить 2 задачи на менее загруженных участников.",
     conflictCount: "2 зависимости",
     modelTrust: "0.81",
     discrepancies: [
@@ -292,6 +301,11 @@ const PROJECTS = {
       "Операционные логи команды",
       "История похожих релизов",
       "Частично заполненные задачи Jira"
+    ],
+    actions: [
+      "Подтвердить API-контракт у смежной команды до пятницы.",
+      "Перераспределить задачу нагрузочного тестирования.",
+      "Добавить буфер +3 дня к финальной интеграции."
     ],
     aiRecommendation: {
       title: "Перераспределить 2 задачи и закрепить владельца зависимости",
@@ -325,6 +339,8 @@ const PROJECTS = {
     reportId: "gamma-report",
     filters: ["report"],
     note: "Руководитель может кликнуть по любой цифре и сразу увидеть подтверждающий источник.",
+    summary:
+      "AI сопоставил 26 цифр из 18 слайдов с данными Jira и финансовым snapshot. Найдено 2 расхождения: дата релиза в PPTX не совпадает с Jira, а прогноз загрузки не подкреплён источником.",
     conflictCount: "2 расхождения",
     modelTrust: "0.92",
     discrepancies: [
@@ -340,6 +356,11 @@ const PROJECTS = {
       "Jira board проекта",
       "Finance snapshot от 12.05",
       "Папка комитета на корпоративном диске"
+    ],
+    actions: [
+      "Обновить дату релиза на слайдах 4 и 11.",
+      "Добавить ссылку на weekly capacity review.",
+      "Перезапустить AI-проверку перед комитетом."
     ],
     aiRecommendation: {
       title: "Обновить 2 слайда и прикрепить ссылки на источники",
@@ -470,21 +491,50 @@ const REPORT_INSIGHTS = {
 const AI_ANSWERS = {
   losses: {
     title: "Откуда цифра по убыткам?",
-    text: "7,4 млн ₽ собраны из штрафа по SLA, отложенного запуска биллинга и дополнительной загрузки команды. Источники: finance snapshot, budget review и карточка Alpha ERP."
+    text: "7,4 млн ₽ — сумма штрафа по SLA, задержки запуска биллинга и дополнительной загрузки поддержки. Источники: finance snapshot 12.05, budget review и карточка Alpha ERP."
   },
   delay: {
     title: "Почему релиз ушёл вправо?",
-    text: "Интеграционное тестирование оказалось назначено раньше, чем готов стенд и внешний API-контур. AI рекомендует переставить зависимые задачи, а не сдвигать весь релиз."
+    text: "Главная причина — неподтверждённая дата интеграции с API-командой смежного отдела. Вторая причина — расхождение дат в Jira и Confluence, из-за которого команда работала с разными ориентирами."
   },
   critical: {
     title: "Какая задача тянет критический путь?",
-    text: "Связка “API-контракт → интеграционное тестирование → клиентское демо” формирует текущий критический путь. Первый узел сейчас не подтверждён."
+    text: "Задача “Интеграционное тестирование” зависит от API-контракта, который ещё не подписан. Сдвиг этой точки переносит ещё 3 зависимые вехи, но сохраняет клиентское окно релиза."
   },
   unconfirmed: {
     title: "Какие сроки ещё не подтверждены?",
-    text: "Не подтверждены дата внешней интеграции, окно интеграционного тестирования и одна дата релиза в презентации Gamma Cloud."
+    text: "Не подтверждены дата внешней интеграции, окно интеграционного тестирования и одна дата релиза в презентации Gamma Cloud. Это самые чувствительные точки для защиты проекта."
   }
 };
+
+const RECONCILE_STEPS = [
+  "Читаю данные из Jira...",
+  "Читаю данные из Confluence...",
+  "Сравниваю даты по проектам...",
+  "Обнаружено несколько расхождений — формирую отчёт..."
+];
+
+const RECONCILE_RESULT = {
+  title: "Сверка завершена",
+  text: "AI нашёл 9 расхождений между Jira и Confluence. Критические: Alpha ERP и Nova Stack. Рекомендую начать с Alpha ERP — там максимальный финансовый риск.",
+  metrics: [
+    ["Проверено", "27 проектов"],
+    ["Расхождений", "9"],
+    ["Критических", "2"]
+  ],
+  list: [
+    "Alpha ERP — унифицировать дату релиза и окно тестирования.",
+    "Nova Stack — согласовать API-контракт и внешнюю зависимость.",
+    "Остальные конфликты оставить на мониторинге."
+  ]
+};
+
+const VERIFY_STEPS = [
+  "Читаю загруженный файл...",
+  "Извлекаю цифры и даты...",
+  "Сверяю с Jira, Confluence и финансовым контуром...",
+  "Генерирую отчёт о расхождениях..."
+];
 
 const MANAGERS = ["Иван Соколов", "Мария Кузнецова", "Дмитрий Орлов"];
 
@@ -524,6 +574,7 @@ const elements = {
   emptyState: document.getElementById("empty-state"),
   answerTitle: document.getElementById("answer-title"),
   answerText: document.getElementById("answer-text"),
+  answerCard: document.getElementById("answer-card"),
   uploadZone: document.getElementById("upload-zone"),
   uploadTitle: document.getElementById("upload-title"),
   uploadText: document.getElementById("upload-text"),
@@ -639,6 +690,43 @@ function showToast(message) {
   }, 2400);
 }
 
+function runLoader(steps, onDone, stepDelay = 850) {
+  let stepIndex = 0;
+
+  function next() {
+    if (stepIndex >= steps.length) {
+      elements.toast.classList.remove("toast-visible");
+      window.setTimeout(() => {
+        elements.toast.classList.add("is-hidden");
+        if (typeof onDone === "function") onDone();
+      }, 180);
+      return;
+    }
+
+    showToast(steps[stepIndex], stepDelay + 120);
+    stepIndex += 1;
+    window.setTimeout(next, stepDelay);
+  }
+
+  next();
+}
+
+function typeText(element, text, speed = 14) {
+  window.clearTimeout(typeText.timeoutId);
+  element.textContent = "";
+  let index = 0;
+
+  function tick() {
+    element.textContent += text[index];
+    index += 1;
+    if (index < text.length) {
+      typeText.timeoutId = window.setTimeout(tick, speed);
+    }
+  }
+
+  if (text) tick();
+}
+
 function setSelectedRole(roleKey, options = {}) {
   state.selectedRole = roleKey;
   elements.corpLogin.disabled = !roleKey;
@@ -745,6 +833,8 @@ function setActiveScreen(screenName) {
   document.querySelectorAll(".nav-item").forEach((button) => {
     button.classList.toggle("nav-item-active", button.dataset.screenTarget === screenName);
   });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function syncActiveFilters() {
@@ -803,6 +893,16 @@ function renderTextCards(items) {
     <div class="modal-list">
       ${items.map((item) => `<article class="modal-bullet">${item}</article>`).join("")}
     </div>
+  `;
+}
+
+function renderCustomModal(payload) {
+  return `
+    <span class="answer-label">${payload.kicker || "AI-результат"}</span>
+    <h2 id="modal-title">${payload.title || "Детали"}</h2>
+    <p>${payload.text || ""}</p>
+    ${payload.metrics?.length ? renderMetrics(payload.metrics) : ""}
+    ${payload.list?.length ? renderTextCards(payload.list) : ""}
   `;
 }
 
@@ -1172,6 +1272,8 @@ function renderModalContent() {
       return renderMeetingForm(state.modalContext.projectKey);
     case "return-form":
       return renderReturnForm(state.modalContext.projectKey);
+    case "custom":
+      return renderCustomModal(state.modalContext.payload);
     default:
       return "";
   }
@@ -1231,12 +1333,20 @@ function saveSettings() {
 function setAnswer(questionKey) {
   const answer = AI_ANSWERS[questionKey];
   if (!answer) return;
-  elements.answerTitle.textContent = answer.title;
-  elements.answerText.textContent = answer.text;
-  state.lastQuestion = answer.title;
-  elements.profileLastQuestion.textContent = answer.title;
-  saveSession();
+  elements.answerCard.style.opacity = "0.5";
+  elements.answerTitle.textContent = "AI думает...";
+  elements.answerText.textContent = "";
   setActiveScreen("ai");
+
+  window.clearTimeout(setAnswer.timeoutId);
+  setAnswer.timeoutId = window.setTimeout(() => {
+    elements.answerTitle.textContent = answer.title;
+    typeText(elements.answerText, answer.text);
+    elements.answerCard.style.opacity = "1";
+    state.lastQuestion = answer.title;
+    elements.profileLastQuestion.textContent = answer.title;
+    saveSession();
+  }, 700);
 }
 
 function positionTooltip(target) {
@@ -1279,6 +1389,13 @@ function openProjectFocus(projectKey, focus) {
   });
 }
 
+function openCustomModal(payload) {
+  openAppModal({
+    type: "custom",
+    payload
+  });
+}
+
 function handleFeatureLock(action) {
   const actionFeatureMap = {
     "open-finance": "finance"
@@ -1299,12 +1416,53 @@ function handleAction(action, data = {}) {
   switch (action) {
     case "reconcile":
       setActiveScreen("projects");
-      showToast("Сверка запущена: найдено 4 конфликта по срокам.");
+      runLoader(RECONCILE_STEPS, () => {
+        openCustomModal({
+          kicker: "Результат сверки",
+          title: RECONCILE_RESULT.title,
+          text: RECONCILE_RESULT.text,
+          metrics: RECONCILE_RESULT.metrics,
+          list: RECONCILE_RESULT.list
+        });
+      });
       return;
     case "verify":
-      openProjectFocus(data.project, "report");
+      runLoader(VERIFY_STEPS, () => {
+        const project = getProject(data.project);
+        openCustomModal({
+          kicker: "AI-проверка завершена",
+          title: `${project.title}: отчёт верифицирован`,
+          text: project.summary,
+          metrics: [
+            ["Слайдов", project.key === "gamma" ? "18" : "12"],
+            ["Цифр", project.key === "gamma" ? "26" : "14"],
+            ["Подтверждено", project.key === "gamma" ? "24" : "11"],
+            ["Расхождений", project.key === "gamma" ? "2" : project.conflictCount]
+          ],
+          list: project.actions
+        });
+      });
       return;
     case "verify-all":
+      runLoader(VERIFY_STEPS, () => {
+        openCustomModal({
+          kicker: "Сводная проверка",
+          title: "Все презентации проверены",
+          text: "AI проверил активные отчёты, собрал критические расхождения и подготовил следующий список приоритетов.",
+          metrics: [
+            ["Отчётов", "3"],
+            ["Цифр", "74"],
+            ["Расхождений", "2"],
+            ["Критично", "Gamma Cloud"]
+          ],
+          list: [
+            "Gamma Cloud — обновить дату релиза на слайдах 4 и 11.",
+            "Alpha ERP — уточнить источник единой даты интеграции.",
+            "Nova Stack — приложить capacity review и подтвердить зависимость."
+          ]
+        });
+      });
+      return;
     case "open-reports":
       openAppModal({ type: "reports" });
       return;
@@ -1321,9 +1479,11 @@ function handleAction(action, data = {}) {
       openProjectFocus(data.project, "overview");
       return;
     case "manual":
+      showToast("Режим ручной корректировки открыт");
       openProjectFocus(data.project, "risk");
       return;
     case "report":
+      showToast(`✓ ${getProject(data.project).title} добавлен в отчёт`);
       openProjectFocus(data.project, "report");
       return;
     case "source":
@@ -1509,13 +1669,56 @@ elements.uploadZone.addEventListener("click", () => {
   elements.fileInput.click();
 });
 
+elements.uploadZone.addEventListener("dragover", (event) => {
+  if (!isActionAllowed("reportUpload")) return;
+  event.preventDefault();
+  elements.uploadZone.classList.add("upload-zone-active");
+});
+
+elements.uploadZone.addEventListener("dragleave", () => {
+  elements.uploadZone.classList.remove("upload-zone-active");
+});
+
+elements.uploadZone.addEventListener("drop", (event) => {
+  if (!isActionAllowed("reportUpload")) return;
+  event.preventDefault();
+  elements.uploadZone.classList.remove("upload-zone-active");
+  const [file] = event.dataTransfer.files;
+  if (file) {
+    processUploadedFile(file);
+  }
+});
+
+function processUploadedFile(file) {
+  elements.uploadTitle.textContent = `Анализирую «${file.name}»...`;
+  elements.uploadText.textContent = "AI извлекает цифры, сверяет их с системами и готовит summary для руководителя.";
+  runLoader(VERIFY_STEPS, () => {
+    elements.uploadTitle.textContent = `✓ ${file.name} проверен`;
+    elements.uploadText.textContent = "Найдено 2 расхождения. Подробности доступны в проверке отчётов.";
+    showToast(`✓ Файл «${file.name}» проанализирован`);
+    setActiveScreen("reports");
+    openCustomModal({
+      kicker: "Результат загрузки",
+      title: `${file.name}: проверка завершена`,
+      text: "AI извлёк цифры, даты и ссылки на источники, затем сравнил их с Jira, Confluence и финансовым контуром.",
+      metrics: [
+        ["Извлечено", "26 цифр"],
+        ["Подтверждено", "24"],
+        ["Расхождений", "2"]
+      ],
+      list: [
+        "Дата релиза расходится между презентацией и Jira.",
+        "Прогноз загрузки команды требует ссылки на weekly capacity review.",
+        "Финансовые потери подтверждены finance snapshot."
+      ]
+    });
+  });
+}
+
 elements.fileInput.addEventListener("change", () => {
   const [file] = elements.fileInput.files;
   if (!file) return;
-  elements.uploadTitle.textContent = `Загружен файл: ${file.name}`;
-  elements.uploadText.textContent =
-    "Сервис анализирует материал, ищет источники цифр и готовит summary для руководителя.";
-  showToast("Файл загружен в сервис.");
+  processUploadedFile(file);
 });
 
 elements.modalBackdrop.addEventListener("click", (event) => {
