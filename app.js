@@ -991,7 +991,7 @@ function renderProjectModal(projectKey, focus = "overview") {
       ["Отчёт", reportStatus],
       ["Рекомендация", recommendationStatus]
     ])}
-    <section class="modal-section focus-callout">
+    <section class="modal-section focus-callout" style="margin-top: 12px;">
       <span class="answer-label">${focusBlock.title}</span>
       <p>${focusBlock.text}</p>
     </section>
