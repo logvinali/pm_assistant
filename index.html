@@ -11,6 +11,47 @@
     <div class="page-glow page-glow-right"></div>
 
     <main class="app-shell">
+      <section class="entry-screen" id="entry-screen">
+        <div class="entry-card">
+          <p class="eyebrow">Стартовый экран</p>
+          <h1>YADRO Project AI</h1>
+          <p class="entry-subtitle">ИИ-ассистент для контура проектов</p>
+
+          <div class="entry-login">
+            <button class="primary-button primary-button-wide" type="button" id="corp-login" disabled>
+              Войти через корпоративный аккаунт
+            </button>
+            <p class="entry-caption">
+              Выберите роль, чтобы посмотреть сервис глазами конкретного пользователя.
+            </p>
+          </div>
+
+          <div class="role-picker" id="role-picker">
+            <button class="role-card" type="button" data-role="office_head">
+              <span class="answer-label">Роль</span>
+              <strong>Руководитель офиса проектов</strong>
+              <p>Портфель, риски, проверка и принятие решений по отчётам.</p>
+            </button>
+            <button class="role-card" type="button" data-role="project_manager">
+              <span class="answer-label">Роль</span>
+              <strong>Проектный менеджер</strong>
+              <p>Свои проекты, загрузка отчётов, риски и комментарии руководителя.</p>
+            </button>
+            <button class="role-card" type="button" data-role="finance_controller">
+              <span class="answer-label">Роль</span>
+              <strong>Финансовый контролёр</strong>
+              <p>Источники цифр, потери и сверка расхождений между системами.</p>
+            </button>
+            <button class="role-card" type="button" data-role="top_manager">
+              <span class="answer-label">Роль</span>
+              <strong>Топ-менеджер</strong>
+              <p>Summary по портфелю, ключевые риски и финансовый эффект.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="workspace-app is-hidden" id="workspace-app">
       <header class="topbar">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">
@@ -25,13 +66,13 @@
         </div>
 
         <div class="topbar-actions">
-          <button class="ghost-button" type="button" data-screen-target="home">Портфель Q2</button>
-          <button class="ghost-button" type="button" data-screen-target="projects">27 активных инициатив</button>
-          <button class="profile-button" type="button" data-screen-target="profile">
+          <button class="ghost-button" type="button" data-screen-target="home" id="portfolio-button">Портфель Q2</button>
+          <button class="ghost-button" type="button" data-screen-target="projects" id="initiatives-button">27 активных инициатив</button>
+          <button class="profile-button" type="button" data-action="open-settings">
             <span class="profile-avatar">АП</span>
             <span class="profile-copy">
-              <strong>Анна Петрова</strong>
-              <small>руководитель офиса</small>
+              <strong id="topbar-name">Анна Петрова</strong>
+              <small id="topbar-role">руководитель офиса</small>
             </span>
           </button>
         </div>
@@ -118,6 +159,29 @@
             </article>
           </section>
 
+          <section class="summary-strip">
+            <button class="summary-card interactive-card" type="button" data-action="open-risks">
+              <span class="answer-label">Риски</span>
+              <strong id="summary-risks-count">12 активных</strong>
+              <p>Открыть список конкретных рисков с источниками и действиями.</p>
+            </button>
+            <button class="summary-card interactive-card" type="button" data-action="open-reports">
+              <span class="answer-label">Отчёты</span>
+              <strong id="summary-reports-count">3 на проверке</strong>
+              <p>Посмотреть статусы верификации, недостающие цифры и решения.</p>
+            </button>
+            <button class="summary-card interactive-card" type="button" data-action="open-finance">
+              <span class="answer-label">Финансы</span>
+              <strong id="summary-finance-count">9,8 млн ₽ эффекта</strong>
+              <p>Провалиться в финансовые потери и подтверждающие источники.</p>
+            </button>
+            <button class="summary-card interactive-card" type="button" data-action="open-overview">
+              <span class="answer-label">Портфель</span>
+              <strong id="summary-overview-count">27 инициатив</strong>
+              <p>Агрегированный обзор по портфелю и ключевым проектам.</p>
+            </button>
+          </section>
+
           <section class="home-grid">
             <article class="surface-card">
               <div class="section-heading surface-heading">
@@ -138,13 +202,13 @@
                     <span class="status-chip status-chip-danger">68% риск</span>
                   </div>
                   <div class="compact-metrics">
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Источники расхождения" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Стендап: 22.05">
+                    <div class="metric-pill has-tooltip" data-action="detail-conflict" data-project="alpha" data-tooltip-title="Источники расхождения" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Стендап: 22.05">
                       <span>4 источника</span>
                     </div>
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Финансовый эффект" data-tooltip-text="Штраф по SLA, отложенный запуск биллинга и дополнительная загрузка команды">
+                    <div class="metric-pill has-tooltip" data-action="detail-finance" data-project="alpha" data-tooltip-title="Финансовый эффект" data-tooltip-text="Штраф по SLA, отложенный запуск биллинга и дополнительная загрузка команды">
                       <span>7,4 млн ₽</span>
                     </div>
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Рекомендация AI" data-tooltip-text="Перенести старт интеграционного тестирования на 2 дня позже и закрепить одну эталонную дату">
+                    <div class="metric-pill has-tooltip" data-action="detail-recommendation" data-project="alpha" data-tooltip-title="Рекомендация AI" data-tooltip-text="Перенести старт интеграционного тестирования на 2 дня позже и закрепить одну эталонную дату">
                       <span>AI-план</span>
                     </div>
                   </div>
@@ -159,13 +223,13 @@
                     <span class="status-chip status-chip-warn">54% риск</span>
                   </div>
                   <div class="compact-metrics">
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Причина перегрузки" data-tooltip-text="6 сотрудников выходят за порог 40 ч/нед на следующей неделе">
+                    <div class="metric-pill has-tooltip" data-action="detail-risk" data-project="nova" data-tooltip-title="Причина перегрузки" data-tooltip-text="6 сотрудников выходят за порог 40 ч/нед на следующей неделе">
                       <span>6 сотрудников</span>
                     </div>
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Основа прогноза" data-tooltip-text="Brief проекта, операционные логи и похожие завершённые релизы">
+                    <div class="metric-pill has-tooltip" data-action="detail-source" data-project="nova" data-tooltip-title="Основа прогноза" data-tooltip-text="Brief проекта, операционные логи и похожие завершённые релизы">
                       <span>0.81 доверие</span>
                     </div>
-                    <div class="metric-pill has-tooltip" data-tooltip-title="Не подтверждено" data-tooltip-text="API-контракт и окно интеграции со смежной командой">
+                    <div class="metric-pill has-tooltip" data-action="detail-conflict" data-project="nova" data-tooltip-title="Не подтверждено" data-tooltip-text="API-контракт и окно интеграции со смежной командой">
                       <span>2 зависимости</span>
                     </div>
                   </div>
@@ -183,18 +247,18 @@
               </div>
 
               <div class="status-stack">
-                <article class="status-item has-tooltip" data-tooltip-title="Почему это важно" data-tooltip-text="Если не унифицировать дату релиза, презентация и операционный контур будут расходиться до комитета">
-                  <strong>Унифицировать дату в Jira и Confluence</strong>
-                  <p>AI уже нашёл эталонную дату и готов обновить связанные записи.</p>
-                </article>
-                <article class="status-item has-tooltip" data-tooltip-title="Каскадный эффект" data-tooltip-text="Сдвиг одной задачи переносит ещё 3 зависимые точки, но сохраняет клиентское окно">
-                  <strong>Перенести старт тестирования на 2 дня</strong>
-                  <p>Это снижает риск каскадной задержки и сохраняет релиз в окне.</p>
-                </article>
-                <article class="status-item has-tooltip" data-tooltip-title="Ретроспективный паттерн" data-tooltip-text="Такая же комбинация причин уже была в прошлом релизе: внешняя зависимость и неверная оценка трудозатрат">
-                  <strong>Запустить ретроспективу по похожему проекту</strong>
-                  <p>Сервис уже подобрал похожий кейс и показал главные причины срыва.</p>
-                </article>
+                  <article class="status-item has-tooltip" data-action="detail-recommendation" data-project="alpha" data-tooltip-title="Почему это важно" data-tooltip-text="Если не унифицировать дату релиза, презентация и операционный контур будут расходиться до комитета">
+                    <strong>Унифицировать дату в Jira и Confluence</strong>
+                    <p>AI уже нашёл эталонную дату и готов обновить связанные записи.</p>
+                  </article>
+                  <article class="status-item has-tooltip" data-action="detail-recommendation" data-project="alpha" data-tooltip-title="Каскадный эффект" data-tooltip-text="Сдвиг одной задачи переносит ещё 3 зависимые точки, но сохраняет клиентское окно">
+                    <strong>Перенести старт тестирования на 2 дня</strong>
+                    <p>Это снижает риск каскадной задержки и сохраняет релиз в окне.</p>
+                  </article>
+                  <article class="status-item has-tooltip" data-action="detail-recommendation" data-project="nova" data-tooltip-title="Ретроспективный паттерн" data-tooltip-text="Такая же комбинация причин уже была в прошлом релизе: внешняя зависимость и неверная оценка трудозатрат">
+                    <strong>Запустить ретроспективу по похожему проекту</strong>
+                    <p>Сервис уже подобрал похожий кейс и показал главные причины срыва.</p>
+                  </article>
               </div>
             </aside>
           </section>
@@ -237,11 +301,11 @@
                         <span>Дедлайн</span>
                         <strong>28 июня</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="Формула потерь" data-tooltip-text="Штраф по SLA + задержка запуска биллинга + дополнительная загрузка команды">
+                      <div class="has-tooltip" data-action="detail-finance" data-project="alpha" data-tooltip-title="Формула потерь" data-tooltip-text="Штраф по SLA + задержка запуска биллинга + дополнительная загрузка команды">
                         <span>Потери при сдвиге</span>
                         <strong>7,4 млн ₽</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="Источники" data-tooltip-text="Jira • Confluence • протокол встречи • письмо клиенту">
+                      <div class="has-tooltip" data-action="detail-conflict" data-project="alpha" data-tooltip-title="Источники" data-tooltip-text="Jira • Confluence • протокол встречи • письмо клиенту">
                         <span>Конфликтов</span>
                         <strong>4 источника</strong>
                       </div>
@@ -277,11 +341,11 @@
                         <span>Дедлайн</span>
                         <strong>11 июля</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="Кто перегружен" data-tooltip-text="2 backend, 2 QA и 2 аналитика переходят порог 40 ч/нед">
+                      <div class="has-tooltip" data-action="detail-risk" data-project="nova" data-tooltip-title="Кто перегружен" data-tooltip-text="2 backend, 2 QA и 2 аналитика переходят порог 40 ч/нед">
                         <span>Перегрузка</span>
                         <strong>6 сотрудников</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="На чём основан прогноз" data-tooltip-text="Brief проекта, операционные логи, история похожих релизов, частичные данные Jira">
+                      <div class="has-tooltip" data-action="detail-source" data-project="nova" data-tooltip-title="На чём основан прогноз" data-tooltip-text="Brief проекта, операционные логи, история похожих релизов, частичные данные Jira">
                         <span>Доверие модели</span>
                         <strong>0.81</strong>
                       </div>
@@ -318,11 +382,11 @@
                         <span>Слайдов</span>
                         <strong>18</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="Какие цифры проверяются" data-tooltip-text="Даты релиза, потери, прогноз загрузки, статус внешней интеграции">
+                      <div class="has-tooltip" data-action="detail-report" data-project="gamma" data-tooltip-title="Какие цифры проверяются" data-tooltip-text="Даты релиза, потери, прогноз загрузки, статус внешней интеграции">
                         <span>Цифр на проверке</span>
                         <strong>26</strong>
                       </div>
-                      <div class="has-tooltip" data-tooltip-title="Найденные расхождения" data-tooltip-text="Дата релиза в PPTX и Jira не совпадает. Сумма потерь обновлена в finance snapshot">
+                      <div class="has-tooltip" data-action="detail-report" data-project="gamma" data-tooltip-title="Найденные расхождения" data-tooltip-text="Дата релиза в PPTX и Jira не совпадает. Сумма потерь обновлена в finance snapshot">
                         <span>Расхождений</span>
                         <strong>2</strong>
                       </div>
@@ -347,15 +411,15 @@
                 </div>
 
                 <div class="explain-list">
-                  <article class="explain-item has-tooltip" data-tooltip-title="Источники по срокам" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Встреча: 22.05 • Письмо клиенту: 24.05">
+                  <article class="explain-item has-tooltip" data-action="detail-conflict" data-project="alpha" data-tooltip-title="Источники по срокам" data-tooltip-text="Jira: 20.05 • Confluence: 25.05 • Встреча: 22.05 • Письмо клиенту: 24.05">
                     <strong>Расхождение по срокам</strong>
                     <p>Наведение показывает все источники и даты прямо в сервисе.</p>
                   </article>
-                  <article class="explain-item has-tooltip" data-tooltip-title="Каскадные зависимости" data-tooltip-text="Сдвиг Alpha ERP влияет на тестирование, клиентское демо и релиз смежной команды">
+                  <article class="explain-item has-tooltip" data-action="detail-risk" data-project="alpha" data-tooltip-title="Каскадные зависимости" data-tooltip-text="Сдвиг Alpha ERP влияет на тестирование, клиентское демо и релиз смежной команды">
                     <strong>Влияние на зависимые задачи</strong>
                     <p>Пользователь видит не только риск, но и цепочку последствий.</p>
                   </article>
-                  <article class="explain-item has-tooltip" data-tooltip-title="Почему AI уверен" data-tooltip-text="Учитываются загруженные brief-файлы, журнал статусов и шаблоны из завершённых проектов">
+                  <article class="explain-item has-tooltip" data-action="detail-source" data-project="nova" data-tooltip-title="Почему AI уверен" data-tooltip-text="Учитываются загруженные brief-файлы, журнал статусов и шаблоны из завершённых проектов">
                     <strong>Основание прогноза</strong>
                     <p>У каждой рекомендации есть объяснение и контекст.</p>
                   </article>
@@ -417,15 +481,15 @@
                 </div>
 
                 <div class="status-stack">
-                  <article class="status-item" data-action="details" data-project="alpha">
+                  <article class="status-item" data-action="detail-recommendation" data-project="alpha">
                     <strong>Сдвинуть начало тестирования</strong>
                     <p>Снижает каскадную задержку на 11% и не меняет клиентское окно релиза.</p>
                   </article>
-                  <article class="status-item" data-action="details" data-project="nova">
+                  <article class="status-item" data-action="detail-recommendation" data-project="nova">
                     <strong>Подтвердить API-контракт у смежной команды</strong>
                     <p>Без статуса по интеграции модель удерживает проект в красной зоне.</p>
                   </article>
-                  <article class="status-item" data-action="details" data-project="gamma">
+                  <article class="status-item" data-action="detail-recommendation" data-project="gamma">
                     <strong>Проверить 2 расхождения в презентации</strong>
                     <p>AI уже сопоставил слайды с задачами и финансовым snapshot.</p>
                   </article>
@@ -473,21 +537,21 @@
                 </div>
 
                 <div class="verification-list">
-                  <article class="verification-row has-tooltip" data-tooltip-title="Источники даты" data-tooltip-text="PPTX: 15 мая • Jira: 20 мая • Протокол встречи: 18 мая">
+                  <article class="verification-row has-tooltip" data-action="detail-report-row" data-report="release-date" data-tooltip-title="Источники даты" data-tooltip-text="PPTX: 15 мая • Jira: 20 мая • Протокол встречи: 18 мая">
                     <div>
                       <strong>Дата релиза в отчёте расходится с Jira</strong>
                       <p>AI нашёл конфликт и предлагает обновить 2 слайда.</p>
                     </div>
                     <span class="status-chip status-chip-danger">критично</span>
                   </article>
-                  <article class="verification-row has-tooltip" data-tooltip-title="Источники убытков" data-tooltip-text="Finance snapshot 12.05 • Budget review • карточка Alpha ERP">
+                  <article class="verification-row has-tooltip" data-action="detail-report-row" data-report="financial-loss" data-tooltip-title="Источники убытков" data-tooltip-text="Finance snapshot 12.05 • Budget review • карточка Alpha ERP">
                     <div>
                       <strong>Сумма потерь подтверждена финансовым контуром</strong>
                       <p>Пояснение доступно по наведению и через кнопку поиска источника.</p>
                     </div>
                     <span class="status-chip status-chip-safe">проверено</span>
                   </article>
-                  <article class="verification-row has-tooltip" data-tooltip-title="Не хватает данных" data-tooltip-text="В презентации есть прогноз загрузки, но не приложен источник из планирования команды">
+                  <article class="verification-row has-tooltip" data-action="detail-report-row" data-report="capacity-gap" data-tooltip-title="Не хватает данных" data-tooltip-text="В презентации есть прогноз загрузки, но не приложен источник из планирования команды">
                     <div>
                       <strong>Прогноз загрузки команды не подкреплён ссылкой</strong>
                       <p>AI рекомендует приложить источник из weekly capacity review.</p>
@@ -513,12 +577,12 @@
               <section class="surface-card">
                 <div class="profile-grid">
                   <div class="profile-stat">
-                    <span>Доступные модули</span>
-                    <strong>1, 2, 3, 4</strong>
+                    <span>Роль</span>
+                    <strong id="profile-role-title">Руководитель офиса проектов</strong>
                   </div>
                   <div class="profile-stat">
                     <span>Фокус недели</span>
-                    <strong>3 риска и 2 отчёта</strong>
+                    <strong id="profile-focus-text">3 риска и 2 отчёта</strong>
                   </div>
                   <div class="profile-stat">
                     <span>Последний вопрос AI</span>
@@ -533,22 +597,10 @@
                     <p class="eyebrow">Ролевые права</p>
                     <h2>Что доступно в сервисе</h2>
                   </div>
+                  <button class="ghost-button ghost-button-dark" type="button" data-action="open-settings">Настройки профиля</button>
                 </div>
 
-                <div class="permission-list">
-                  <article class="status-item">
-                    <strong>Просмотр агрегированных данных по портфелю</strong>
-                    <p>Сводка рисков, сроки, финансовый эффект и подтверждённость дат.</p>
-                  </article>
-                  <article class="status-item">
-                    <strong>Проверка презентаций и поиск источников</strong>
-                    <p>Любую цифру или дату можно проверить прямо из отчётного контура.</p>
-                  </article>
-                  <article class="status-item">
-                    <strong>Ретроспективы завершённых проектов</strong>
-                    <p>Сервис объясняет, почему релиз сдвинулся и какие паттерны повторяются.</p>
-                  </article>
-                </div>
+                <div class="permission-list" id="permission-list"></div>
               </section>
             </div>
           </div>
@@ -577,6 +629,7 @@
           <span>Профиль</span>
         </button>
       </nav>
+      </div>
     </main>
 
     <div class="tooltip-card is-hidden" id="tooltip-card">
@@ -587,11 +640,80 @@
     <div class="modal-backdrop is-hidden" id="modal-backdrop">
       <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <button class="modal-close" type="button" id="modal-close" aria-label="Закрыть окно">×</button>
-        <span class="answer-label" id="modal-kicker">Карточка проекта</span>
-        <h2 id="modal-title">Детали проекта</h2>
-        <p id="modal-text">Здесь появятся причины риска, конфликты и рекомендации.</p>
-        <div class="modal-metrics" id="modal-metrics"></div>
-        <div class="modal-list" id="modal-list"></div>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop is-hidden" id="settings-backdrop">
+      <div class="modal-card settings-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <button class="modal-close" type="button" id="settings-close" aria-label="Закрыть окно">×</button>
+        <span class="answer-label">Профиль и настройки</span>
+        <h2 id="settings-title">Настройки пользователя</h2>
+        <form class="settings-form" id="settings-form">
+          <div class="settings-grid">
+            <label class="field">
+              <span>Имя пользователя</span>
+              <input type="text" id="settings-name" />
+            </label>
+            <label class="field">
+              <span>Роль</span>
+              <input type="text" id="settings-role" disabled />
+            </label>
+            <label class="field">
+              <span>Email</span>
+              <input type="email" id="settings-email" />
+            </label>
+            <label class="field">
+              <span>Подразделение</span>
+              <input type="text" id="settings-department" />
+            </label>
+            <label class="field">
+              <span>Периодичность дайджеста</span>
+              <select id="settings-digest">
+                <option>Каждый день</option>
+                <option>Каждую неделю</option>
+                <option>Только по критическим рискам</option>
+              </select>
+            </label>
+            <label class="field field-switch">
+              <span>Уведомления</span>
+              <input type="checkbox" id="settings-notifications" />
+            </label>
+          </div>
+
+          <div class="integration-grid">
+            <article class="integration-card">
+              <strong>Jira</strong>
+              <p>Синхронизация задач и дедлайнов</p>
+              <label class="field-switch compact-switch">
+                <input type="checkbox" id="settings-jira" />
+                <span>Подключено</span>
+              </label>
+            </article>
+            <article class="integration-card">
+              <strong>Confluence</strong>
+              <p>Сверка проектных страниц и отчётов</p>
+              <label class="field-switch compact-switch">
+                <input type="checkbox" id="settings-confluence" />
+                <span>Подключено</span>
+              </label>
+            </article>
+            <article class="integration-card">
+              <strong>Корпоративный диск</strong>
+              <p>Источники презентаций и материалов</p>
+              <label class="field-switch compact-switch">
+                <input type="checkbox" id="settings-drive" />
+                <span>Подключено</span>
+              </label>
+            </article>
+          </div>
+
+          <div class="modal-actions-bar">
+            <button class="secondary-button" type="button" id="change-role-button">Сменить роль</button>
+            <button class="secondary-button" type="button" id="logout-button">Выйти</button>
+            <button class="primary-button" type="submit">Сохранить</button>
+          </div>
+        </form>
       </div>
     </div>
 
