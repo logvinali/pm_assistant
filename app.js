@@ -252,6 +252,23 @@ const PROJECTS = {
       "Перенести старт интеграционного тестирования на 2 дня.",
       "Запросить письменное подтверждение у API-команды."
     ],
+    metricLogs: {
+      deadline: {
+        title: "Дедлайн: источники и история",
+        sources: ["Jira roadmap", "Confluence: План Q2", "Протокол стендапа 22.05"],
+        history: ["12.05: 30 июня", "17.05: 29 июня", "22.05: 28 июня"]
+      },
+      loss: {
+        title: "Потери при сдвиге: история оценки",
+        sources: ["Finance snapshot 12.05", "Budget review", "SLA-калькулятор"],
+        history: ["12.05: 6,8 млн ₽", "18.05: 7,1 млн ₽", "22.05: 7,4 млн ₽"]
+      },
+      conflicts: {
+        title: "Конфликты: история изменения",
+        sources: ["Jira", "Confluence", "Письмо клиенту", "Протокол встречи"],
+        history: ["15.05: 2 источника", "19.05: 3 источника", "22.05: 4 источника"]
+      }
+    },
     aiRecommendation: {
       title: "Перенести старт интеграционного тестирования на 2 дня",
       text: "Это снимает каскадную перегрузку команды QA и оставляет релиз в клиентском окне.",
@@ -307,6 +324,23 @@ const PROJECTS = {
       "Перераспределить задачу нагрузочного тестирования.",
       "Добавить буфер +3 дня к финальной интеграции."
     ],
+    metricLogs: {
+      deadline: {
+        title: "Дедлайн: источники и история",
+        sources: ["Brief проекта", "Jira board", "Release calendar"],
+        history: ["10.05: 07 июля", "16.05: 09 июля", "21.05: 11 июля"]
+      },
+      overload: {
+        title: "Перегрузка: история изменения",
+        sources: ["Capacity review", "Операционные логи команды"],
+        history: ["14.05: 3 сотрудника", "19.05: 5 сотрудников", "23.05: 6 сотрудников"]
+      },
+      trust: {
+        title: "Доверие модели: история расчёта",
+        sources: ["Brief проекта", "История похожих релизов", "Частичные данные Jira"],
+        history: ["12.05: 0.72", "18.05: 0.77", "23.05: 0.81"]
+      }
+    },
     aiRecommendation: {
       title: "Перераспределить 2 задачи и закрепить владельца зависимости",
       text: "AI видит, что это уменьшит перегрузку и повысит предсказуемость окна интеграции.",
@@ -362,6 +396,23 @@ const PROJECTS = {
       "Добавить ссылку на weekly capacity review.",
       "Перезапустить AI-проверку перед комитетом."
     ],
+    metricLogs: {
+      slides: {
+        title: "Слайды: история изменения",
+        sources: ["PPTX презентации", "Папка комитета"],
+        history: ["16.05: 14 слайдов", "20.05: 16 слайдов", "24.05: 18 слайдов"]
+      },
+      checked: {
+        title: "Цифры на проверке: история",
+        sources: ["PPTX", "Jira board", "Finance snapshot"],
+        history: ["16.05: 18 цифр", "20.05: 22 цифры", "24.05: 26 цифр"]
+      },
+      discrepancies: {
+        title: "Расхождения: история изменения",
+        sources: ["PPTX", "Jira", "Finance snapshot"],
+        history: ["18.05: 4 расхождения", "21.05: 3 расхождения", "24.05: 2 расхождения"]
+      }
+    },
     aiRecommendation: {
       title: "Обновить 2 слайда и прикрепить ссылки на источники",
       text: "После правки сервис сможет автоматически снять статус критичного расхождения.",
@@ -537,6 +588,7 @@ const VERIFY_STEPS = [
 ];
 
 const MANAGERS = ["Иван Соколов", "Мария Кузнецова", "Дмитрий Орлов"];
+const COLLEAGUE_SUGGESTIONS = ["Мария Кузнецова", "Дмитрий Орлов", "Иван Соколов", "Команда QA", "API-команда"];
 
 const state = {
   selectedRole: null,
@@ -802,6 +854,8 @@ function renderRoleUI() {
   renderPermissionList();
   renderSummaryCards();
   syncRoleDependentButtons();
+  decorateCriticalProjectCards();
+  decorateProjectMetricTooltips();
 }
 
 function showEntryScreen() {
@@ -869,6 +923,8 @@ function renderProjects() {
   });
 
   elements.emptyState.classList.toggle("is-hidden", visible > 0);
+  decorateCriticalProjectCards();
+  decorateProjectMetricTooltips();
 }
 
 function renderMetrics(metrics) {
@@ -1252,6 +1308,31 @@ function renderReturnForm(projectKey) {
   `;
 }
 
+function renderNotifyForm(projectKey) {
+  const project = getProject(projectKey);
+
+  return `
+    <span class="answer-label">Критично</span>
+    <h2 id="modal-title">Уведомить коллег</h2>
+    <p>${project.title} • Добавьте коллег в переписку по критичному риску прямо из карточки проекта.</p>
+    <form class="inline-form" data-form="notify-colleagues" data-project="${project.key}">
+      <label class="field">
+        <span>Кого добавить в переписку</span>
+        <input type="text" name="colleagues" value="${COLLEAGUE_SUGGESTIONS.slice(0, 2).join(", ")}" placeholder="Введите имена или email через запятую" required />
+      </label>
+      <label class="field">
+        <span>Комментарий</span>
+        <textarea name="comment" rows="4">Коллеги, в ${project.title} обнаружен критичный риск. Нужна синхронизация по срокам и подтверждение следующего шага.</textarea>
+      </label>
+      <p>Быстрые варианты: ${COLLEAGUE_SUGGESTIONS.join(" • ")}</p>
+      <div class="modal-actions-bar">
+        <button class="secondary-button" type="button" data-action="open-project-focus" data-project="${project.key}" data-focus="overview">Назад к проекту</button>
+        <button class="primary-button" type="submit">Добавить в переписку</button>
+      </div>
+    </form>
+  `;
+}
+
 function renderModalContent() {
   if (!state.modalContext) return "";
 
@@ -1272,6 +1353,8 @@ function renderModalContent() {
       return renderMeetingForm(state.modalContext.projectKey);
     case "return-form":
       return renderReturnForm(state.modalContext.projectKey);
+    case "notify-form":
+      return renderNotifyForm(state.modalContext.projectKey);
     case "custom":
       return renderCustomModal(state.modalContext.payload);
     default:
@@ -1381,6 +1464,53 @@ function hideTooltip() {
   elements.tooltipCard.classList.add("is-hidden");
 }
 
+function bindTooltipTarget(target) {
+  if (target.dataset.tooltipBound === "true") return;
+  target.dataset.tooltipBound = "true";
+  target.tabIndex = 0;
+  target.addEventListener("mouseenter", () => showTooltip(target));
+  target.addEventListener("mouseleave", hideTooltip);
+  target.addEventListener("focus", () => showTooltip(target));
+  target.addEventListener("blur", hideTooltip);
+}
+
+function formatMetricLog(log) {
+  if (!log) return "";
+  const sourcesText = log.sources?.length ? `Источники: ${log.sources.join(" • ")}` : "";
+  const historyText = log.history?.length ? `История: ${log.history.join(" • ")}` : "";
+  return [sourcesText, historyText].filter(Boolean).join(" | ");
+}
+
+function decorateProjectMetricTooltips() {
+  const metricKeyMap = {
+    "дедлайн": "deadline",
+    "потери при сдвиге": "loss",
+    "конфликтов": "conflicts",
+    "перегрузка": "overload",
+    "доверие модели": "trust",
+    "слайдов": "slides",
+    "цифр на проверке": "checked",
+    "расхождений": "discrepancies"
+  };
+
+  document.querySelectorAll(".project-card").forEach((card) => {
+    const project = getProject(card.dataset.project);
+    if (!project?.metricLogs) return;
+
+    card.querySelectorAll(".project-meta div").forEach((metricCard) => {
+      const label = metricCard.querySelector("span")?.textContent?.trim().toLowerCase();
+      const metricKey = metricKeyMap[label];
+      const log = project.metricLogs[metricKey];
+      if (!log) return;
+
+      metricCard.classList.add("has-tooltip");
+      metricCard.dataset.tooltipTitle = log.title;
+      metricCard.dataset.tooltipText = formatMetricLog(log);
+      bindTooltipTarget(metricCard);
+    });
+  });
+}
+
 function openProjectFocus(projectKey, focus) {
   openAppModal({
     type: "project",
@@ -1393,6 +1523,24 @@ function openCustomModal(payload) {
   openAppModal({
     type: "custom",
     payload
+  });
+}
+
+function decorateCriticalProjectCards() {
+  document.querySelectorAll(".project-card").forEach((card) => {
+    const hasCriticalMarker = card.querySelector(".status-chip-danger");
+    const actions = card.querySelector(".project-actions");
+    if (!hasCriticalMarker || !actions || actions.querySelector('[data-action="open-notify-form"]')) {
+      return;
+    }
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "text-button";
+    button.dataset.action = "open-notify-form";
+    button.dataset.project = card.dataset.project;
+    button.textContent = "Уведомить коллег";
+    actions.append(button);
   });
 }
 
@@ -1536,6 +1684,9 @@ function handleAction(action, data = {}) {
     case "open-return-form":
       openAppModal({ type: "return-form", projectKey: data.project });
       return;
+    case "open-notify-form":
+      openAppModal({ type: "notify-form", projectKey: data.project });
+      return;
     default:
       break;
   }
@@ -1558,6 +1709,12 @@ function handleFormSubmit(form) {
     closeModal();
     showToast("Отчёт возвращён менеджеру");
     openProjectFocus(projectKey, "report");
+  }
+
+  if (formType === "notify-colleagues") {
+    closeModal();
+    showToast(`Коллеги добавлены в переписку по ${getProject(projectKey).title}`);
+    openProjectFocus(projectKey, "overview");
   }
 }
 
@@ -1757,10 +1914,7 @@ elements.logoutButton.addEventListener("click", () => {
 });
 
 document.querySelectorAll(".has-tooltip").forEach((item) => {
-  item.addEventListener("mouseenter", () => showTooltip(item));
-  item.addEventListener("mouseleave", hideTooltip);
-  item.addEventListener("focus", () => showTooltip(item));
-  item.addEventListener("blur", hideTooltip);
+  bindTooltipTarget(item);
 });
 
 window.addEventListener("scroll", hideTooltip, { passive: true });
@@ -1784,4 +1938,5 @@ window.addEventListener("keydown", (event) => {
 
 syncActiveFilters();
 setActiveScreen(state.activeScreen);
+decorateCriticalProjectCards();
 bootstrapSession();

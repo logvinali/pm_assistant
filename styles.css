@@ -1091,6 +1091,18 @@ textarea:focus-visible,
     #f8fbf9;
   text-align: center;
   cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.upload-zone-active {
+  border-color: rgba(29, 122, 71, 0.56);
+  background:
+    radial-gradient(circle at top, rgba(59, 166, 107, 0.18), transparent 62%),
+    #f4fbf6;
 }
 
 .upload-icon {
