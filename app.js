@@ -558,6 +558,10 @@ const AI_ANSWERS = {
   }
 };
 
+const AI_REPORT_PROJECT_BY_ROLE = {
+  project_manager: "alpha"
+};
+
 const RECONCILE_STEPS = [
   "Читаю данные из Jira...",
   "Читаю данные из Confluence...",
@@ -634,6 +638,7 @@ const elements = {
   modalBackdrop: document.getElementById("modal-backdrop"),
   modalClose: document.getElementById("modal-close"),
   modalContent: document.getElementById("modal-content"),
+  aiQuestionList: document.querySelector("#screen-ai .question-list-column"),
   settingsBackdrop: document.getElementById("settings-backdrop"),
   settingsClose: document.getElementById("settings-close"),
   settingsForm: document.getElementById("settings-form"),
@@ -729,6 +734,12 @@ function canUseHoverTooltips() {
 function isActionAllowed(featureName) {
   const role = getCurrentRole();
   return Boolean(role.features[featureName]);
+}
+
+function getAIReportProjectKey() {
+  const projectKey = AI_REPORT_PROJECT_BY_ROLE[state.selectedRole];
+  const role = getCurrentRole();
+  return role.projectIds.includes(projectKey) ? projectKey : role.projectIds[0];
 }
 
 function showToast(message) {
@@ -856,6 +867,7 @@ function renderRoleUI() {
   syncRoleDependentButtons();
   decorateCriticalProjectCards();
   decorateProjectMetricTooltips();
+  renderAIReportPrompt();
 }
 
 function showEntryScreen() {
@@ -960,6 +972,75 @@ function renderCustomModal(payload) {
     ${payload.metrics?.length ? renderMetrics(payload.metrics) : ""}
     ${payload.list?.length ? renderTextCards(payload.list) : ""}
   `;
+}
+
+function renderAIReportPrompt() {
+  if (!elements.aiQuestionList) return;
+
+  const existingPrompt = elements.aiQuestionList.querySelector('[data-action="prepare-ai-report"]');
+  if (state.selectedRole !== "project_manager") {
+    existingPrompt?.remove();
+    return;
+  }
+
+  const project = getProject(getAIReportProjectKey());
+  if (!project) return;
+
+  const promptText = `Подготовь отчёт по проекту ${project.title}`;
+  if (existingPrompt) {
+    existingPrompt.dataset.project = project.key;
+    existingPrompt.textContent = promptText;
+    return;
+  }
+
+  const button = document.createElement("button");
+  button.className = "question-chip";
+  button.type = "button";
+  button.dataset.action = "prepare-ai-report";
+  button.dataset.project = project.key;
+  button.textContent = promptText;
+  elements.aiQuestionList.append(button);
+}
+
+function clearAnswerActions() {
+  elements.answerCard.querySelector(".ai-answer-actions")?.remove();
+}
+
+function renderAIReportAnswer(projectKey) {
+  if (state.selectedRole !== "project_manager") {
+    showToast("Подготовка отчёта доступна только проектному менеджеру");
+    return;
+  }
+
+  const project = getProject(projectKey || getAIReportProjectKey());
+  if (!project) return;
+
+  clearAnswerActions();
+  elements.answerCard.style.opacity = "0.5";
+  elements.answerTitle.textContent = "AI готовит отчёт...";
+  elements.answerText.textContent = "Собираю статус, риски, сроки и источники по проекту.";
+  setActiveScreen("ai");
+
+  window.clearTimeout(renderAIReportAnswer.timeoutId);
+  renderAIReportAnswer.timeoutId = window.setTimeout(() => {
+    elements.answerTitle.textContent = `Отчёт по ${project.title} подготовлен`;
+    typeText(
+      elements.answerText,
+      `${project.report.title}: ${project.report.status.toLowerCase()}. В отчёт включены дедлайн ${project.deadline}, риск ${project.riskPercent}%, финансовый эффект ${project.loss}, конфликты и AI-рекомендация.`
+    );
+
+    const actions = document.createElement("div");
+    actions.className = "button-cluster ai-answer-actions";
+    actions.innerHTML = `
+      <button class="primary-button" type="button" data-action="download-ai-report" data-project="${project.key}">Скачать PDF</button>
+      <button class="text-button" type="button" data-action="open-source-picker" data-project="${project.key}">Проверить источники</button>
+    `;
+    elements.answerText.before(actions);
+    elements.answerCard.style.opacity = "1";
+    state.lastQuestion = `Подготовь отчёт по проекту ${project.title}`;
+    elements.profileLastQuestion.textContent = state.lastQuestion;
+    saveSession();
+  }, 700);
 }
 
 function renderLeaderActions(project) {
@@ -1333,6 +1414,37 @@ function renderNotifyForm(projectKey) {
   `;
 }
 
+function renderSourcePicker(projectKey) {
+  const project = getProject(projectKey);
+  if (!project) return "";
+
+  return `
+    <span class="answer-label">Проверка источников</span>
+    <h2 id="modal-title">Выбрать источники для отчёта</h2>
+    <p>${project.title} • AI сверит выбранные источники с подготовленным PDF-отчётом.</p>
+    <form class="inline-form" data-form="check-report-sources" data-project="${project.key}">
+      ${project.sources
+        .map(
+          (source, index) => `
+            <label class="field toggle-row">
+              <span>${source}</span>
+              <input type="checkbox" name="sources" value="${source}" ${index < 3 ? "checked" : ""} />
+            </label>
+          `
+        )
+        .join("")}
+      <label class="field">
+        <span>Комментарий к проверке</span>
+        <textarea name="comment" rows="3">Проверить сроки, финансовые цифры и ссылки перед отправкой отчёта руководителю.</textarea>
+      </label>
+      <div class="modal-actions-bar">
+        <button class="secondary-button" type="button" data-action="open-project-focus" data-project="${project.key}" data-focus="report">Назад к отчёту</button>
+        <button class="primary-button" type="submit">Проверить выбранные источники</button>
+      </div>
+    </form>
+  `;
+}
+
 function renderModalContent() {
   if (!state.modalContext) return "";
 
@@ -1355,6 +1467,8 @@ function renderModalContent() {
       return renderReturnForm(state.modalContext.projectKey);
     case "notify-form":
       return renderNotifyForm(state.modalContext.projectKey);
+    case "source-picker":
+      return renderSourcePicker(state.modalContext.projectKey);
     case "custom":
       return renderCustomModal(state.modalContext.payload);
     default:
@@ -1416,6 +1530,7 @@ function saveSettings() {
 function setAnswer(questionKey) {
   const answer = AI_ANSWERS[questionKey];
   if (!answer) return;
+  clearAnswerActions();
   elements.answerCard.style.opacity = "0.5";
   elements.answerTitle.textContent = "AI думает...";
   elements.answerText.textContent = "";
@@ -1687,6 +1802,16 @@ function handleAction(action, data = {}) {
     case "open-notify-form":
       openAppModal({ type: "notify-form", projectKey: data.project });
       return;
+    case "prepare-ai-report":
+      renderAIReportAnswer(data.project);
+      return;
+    case "download-ai-report":
+      showToast(`PDF-отчёт по ${getProject(data.project).title} готов к скачиванию`);
+      openProjectFocus(data.project, "report");
+      return;
+    case "open-source-picker":
+      openAppModal({ type: "source-picker", projectKey: data.project });
+      return;
     default:
       break;
   }
@@ -1715,6 +1840,13 @@ function handleFormSubmit(form) {
     closeModal();
     showToast(`Коллеги добавлены в переписку по ${getProject(projectKey).title}`);
     openProjectFocus(projectKey, "overview");
+  }
+
+  if (formType === "check-report-sources") {
+    const selectedSources = [...form.querySelectorAll('input[name="sources"]:checked')].length;
+    closeModal();
+    showToast(`Выбрано источников для проверки: ${selectedSources}`);
+    openProjectFocus(projectKey, "source");
   }
 }
 

@@ -1452,6 +1452,30 @@ textarea:focus-visible,
   color: var(--text-soft);
 }
 
+.toggle-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22px;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 720px;
+}
+
+.toggle-row span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.toggle-row input[type="checkbox"] {
+  justify-self: end;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--green);
+}
+
 .field-switch {
   display: flex;
   justify-content: space-between;
